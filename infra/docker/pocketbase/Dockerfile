@@ -4,12 +4,12 @@ FROM alpine:3 AS builder
 
 RUN apk add --no-cache curl unzip ca-certificates
 
-# Get latest PocketBase version dynamically
-RUN PB_VERSION=$(curl -s https://api.github.com/repos/pocketbase/pocketbase/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/v//') \
-    && echo "Latest PocketBase version: $PB_VERSION" \
-    && curl -L -o /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/download/v${PB_VERSION}/pocketbase_${PB_VERSION}_linux_amd64.zip" \
+ARG POCKETBASE_VERSION
+
+RUN echo "Using PocketBase version: $POCKETBASE_VERSION" \
+    && curl -L -o /tmp/pb.zip "https://github.com/pocketbase/pocketbase/releases/download/v${POCKETBASE_VERSION}/pocketbase_${POCKETBASE_VERSION}_linux_amd64.zip" \
     && unzip /tmp/pb.zip -d /pb/ \
-    && echo $PB_VERSION > /pb/VERSION
+    && echo $POCKETBASE_VERSION > /pb/VERSION
 
 # Final image
 FROM alpine:3

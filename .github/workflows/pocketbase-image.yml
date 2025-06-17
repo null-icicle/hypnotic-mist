@@ -15,6 +15,10 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REGISTRY: ghcr.io
+      IMAGE_NAME: ${{ github.event.inputs.image_name || 'ghcr.io/null-icicle/hypnotic-mist/pocketbase' }}
+    permissions:
+      contents: read
+      packages: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
@@ -34,8 +38,10 @@ jobs:
         run: |
           version=$(curl -s https://api.github.com/repos/pocketbase/pocketbase/releases/latest | grep 'tag_name' | cut -d\" -f4 | sed 's/v//')
           major=$(echo "$version" | cut -d. -f1)
+          minor=$(echo "$version" | cut -d. -f2)
           echo "version=$version" >> $GITHUB_OUTPUT
           echo "major=$major" >> $GITHUB_OUTPUT
+          echo "minor=$minor" >> $GITHUB_OUTPUT
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -44,6 +50,8 @@ jobs:
           file: ./infra/docker/pocketbase/Dockerfile
           push: true
           tags: |
-            ${{ github.event.inputs.image_name }}:${{ steps.pb_version.outputs.version }}
-            ${{ github.event.inputs.image_name }}:${{ steps.pb_version.outputs.major }}
-            ${{ github.event.inputs.image_name }}:latest
+            ${{ env.IMAGE_NAME }}:${{ steps.pb_version.outputs.version }}
+            ${{ env.IMAGE_NAME }}:${{ steps.pb_version.outputs.major }}
+            ${{ env.IMAGE_NAME }}:${{ steps.pb_version.outputs.major }}.${{ steps.pb_version.outputs.minor }}
+          build-args: |
+            POCKETBASE_VERSION=${{ steps.pb_version.outputs.version }}
