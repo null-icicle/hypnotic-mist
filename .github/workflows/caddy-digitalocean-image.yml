@@ -12,7 +12,7 @@ on:
         required: true
         default: './infra/docker/caddy-digitalocean'
   schedule:
-    - cron: '15 23 * * *' # every 24h
+    - cron: '15 21 * * *' # every 24h
 
 jobs:
   build-and-push:

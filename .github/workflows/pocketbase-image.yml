@@ -8,7 +8,7 @@ on:
         required: true
         default: 'ghcr.io/null-icicle/hypnotic-mist/pocketbase'
   schedule:
-    - cron: '15 23 * * *' # every 24h
+    - cron: '15 21 * * *' # every 24h
 
 jobs:
   build-and-push:
