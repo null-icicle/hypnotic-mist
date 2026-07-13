@@ -47,7 +47,7 @@ jobs:
         uses: docker/build-push-action@v5
         with:
           context: ./infra/docker/pi-sandbox
-          file: ./infra/docker/pi_sandbox_version/Dockerfile
+          file: ./infra/docker/pi-sandbox/build/Dockerfile
           push: true
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.pi_sandbox_version.outputs.version }}
