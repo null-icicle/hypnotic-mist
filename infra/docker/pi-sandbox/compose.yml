@@ -1,0 +1,26 @@
+name: pi-sandbox
+services:
+    pi-sandbox:
+        #image: ghcr.io/null-icicle/hypnotic-mist/pi-sandbox:0
+        image: pi-sandbox
+        build:
+            context: .
+            dockerfile: build/Dockerfile
+        stdin_open: true
+        tty: true
+        volumes:
+            - ./workspace:/workspace
+            - ./.pi/agent/auth.json:/root/.pi/agent/auth.json
+            - ./.pi/agent/settings.json:/root/.pi/agent/settings.json
+            # Optional: project-scoped settings win over global
+            - ./.pi/settings.json:/workspace/.pi/settings.json
+            # Container-native persistent state (NOT shared with host)
+            - pi-sessions:/root/.pi/agent/sessions
+            - pi-npm:/root/.pi/agent/npm
+            - pi-git:/root/.pi/agent/git
+        ports:
+            - 127.0.0.1:4321:4321
+volumes:
+    pi-sessions:
+    pi-npm:
+    pi-git:
