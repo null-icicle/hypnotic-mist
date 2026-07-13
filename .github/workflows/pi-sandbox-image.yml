@@ -52,6 +52,6 @@ jobs:
           tags: |
             ${{ env.IMAGE_NAME }}:${{ steps.pi_sandbox_version.outputs.version }}
             ${{ env.IMAGE_NAME }}:${{ steps.pi_sandbox_version.outputs.major }}
-            ${{ env.IMAGE_NAME }}:${{ steps.pi_sandbox_version.outputs.major }}.${{ steps.pb_version.outputs.minor }}
+            ${{ env.IMAGE_NAME }}:${{ steps.pi_sandbox_version.outputs.major }}.${{ steps.pi_sandbox_version.outputs.minor }}
           build-args: |
             PI_SANDBOX_VERSION=${{ steps.pi_sandbox_version.outputs.version }}
